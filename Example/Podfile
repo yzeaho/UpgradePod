@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '8.0'
+
+target 'UpgradePod_Example' do
+  pod 'UpgradePod', :path => '../'
+
+  target 'UpgradePod_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
