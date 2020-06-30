@@ -1,0 +1,6 @@
+framework module UpgradePod {
+  umbrella header "UpgradePod-umbrella.h"
+
+  export *
+  module * { export * }
+}

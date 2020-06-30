@@ -7,23 +7,34 @@
 //
 
 #import "CFViewController.h"
+#import "ConfigService.h"
 
-@interface CFViewController ()
+@interface CFViewController ()<ConfigCallback>
 
 @end
 
 @implementation CFViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [[ConfigService sharedInstance] addCallback:self];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [[ConfigService sharedInstance] removeCallback:self];
+}
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void)configNotifyChange {
+    [[ConfigService sharedInstance] show:self];
 }
 
 @end
