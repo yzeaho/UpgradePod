@@ -18,12 +18,10 @@ PODS:
     - CocoaLumberjack/Core (= 3.6.1)
   - CocoaLumberjack/Core (3.6.1)
   - MJExtension (3.2.2)
-  - ReactiveObjC (3.1.1)
   - UpgradePod (0.0.1):
     - AFNetworking (~> 4.0)
     - CocoaLumberjack
     - MJExtension
-    - ReactiveObjC
 
 DEPENDENCIES:
   - UpgradePod (from `../`)
@@ -33,7 +31,6 @@ SPEC REPOS:
     - AFNetworking
     - CocoaLumberjack
     - MJExtension
-    - ReactiveObjC
 
 EXTERNAL SOURCES:
   UpgradePod:
@@ -43,8 +40,7 @@ SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
-  ReactiveObjC: 011caa393aa0383245f2dcf9bf02e86b80b36040
-  UpgradePod: a3df678235a16d5de8ce93be80e3f5c90bbb8c3c
+  UpgradePod: 0122c11f341878c91a898ee8ab51cfc5e6fbbe11
 
 PODFILE CHECKSUM: 20c83e82f0b6cf0b32de8daeef0f53aeb63d5471
 

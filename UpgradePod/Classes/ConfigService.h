@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedInstance;
 
-- (void)config:(NSString *)url;
+- (void)config:(NSString *)url enable:(BOOL)enable;
 
 - (void)addCallback:(id<ConfigCallback>)callback;
 

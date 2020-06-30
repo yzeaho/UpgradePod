@@ -41,6 +41,5 @@ TODO: Add long description of the pod here.
   s.dependency 'AFNetworking', '~> 4.0'
   s.dependency 'CocoaLumberjack'
   s.dependency 'MJExtension'
-  s.dependency 'ReactiveObjC'
   
 end

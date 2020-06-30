@@ -20,4 +20,12 @@
     return NO;
 }
 
+- (BOOL)isUpgradeNormal {
+    return _updateState == 0;
+}
+
+- (BOOL)isUpgradeForce {
+    return _updateState == 1;
+}
+
 @end

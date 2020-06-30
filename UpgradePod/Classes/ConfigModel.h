@@ -14,6 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)hasNewVersion:(NSString *)marketingVersion;
 
+- (BOOL)isUpgradeNormal;
+
+- (BOOL)isUpgradeForce;
+
 @end
 
 NS_ASSUME_NONNULL_END

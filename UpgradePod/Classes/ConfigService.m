@@ -10,6 +10,7 @@
 @property (nonatomic, strong) ConfigModel *model;
 @property (nonatomic, assign) BOOL shown;
 @property (nonatomic, assign) BOOL started;
+@property (nonatomic, assign) BOOL enable;
 @property (nonatomic, strong) NSDate *successDate;
 @property (nonatomic, strong) NSString *configUrl;
 
@@ -40,12 +41,15 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     return self;
 }
 
-- (void)config:(NSString *)url {
+- (void)config:(NSString *)url enable:(BOOL)enable {
     _configUrl = url;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationDidBecomeActiveNotification)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
+    _enable = enable;
+    if (enable) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(applicationDidBecomeActiveNotification)
+                                                     name:UIApplicationDidBecomeActiveNotification
+                                                   object:nil];
+    }
 }
 
 - (void)addCallback:(id<ConfigCallback>)callback {
@@ -114,8 +118,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
         DDLogDebug(@"no new version");
         return;
     }
+    if (!([_model isUpgradeNormal] || [_model isUpgradeForce])) {
+        DDLogDebug(@"Do not prompt for upgrade version");
+        return;
+    }
     if (self.shown) {
-        DDLogDebug(@"alert is already presenting");
+        DDLogDebug(@"Alert is already presenting");
         return;
     }
     NSString *updateAddress = _model.updateAddress;
@@ -127,16 +135,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     NSString *upgradeTitle = NSLocalizedStringFromTableInBundle(@"upgrade.title", @"UpgradePod", bundle, nil);
     NSString *actionCancel = NSLocalizedStringFromTableInBundle(@"action.cancel", @"UpgradePod", bundle, nil);
     NSString *actionUpgrade = NSLocalizedStringFromTableInBundle(@"action.upgrade", @"UpgradePod", bundle, nil);
+    BOOL upgradeForce = [_model isUpgradeForce];
     UIAlertController *c = [UIAlertController alertControllerWithTitle:upgradeTitle message:_model.updateTip preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:actionUpgrade style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:updateAddress] options:@{} completionHandler:^(BOOL success) {
             DDLogDebug(@"openURL completion %@", success ? @"success" : @"error");
-            exit(0);
+            if (upgradeForce) {
+                exit(0);
+            }
         }];
         self.shown = false;
     }];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:actionCancel style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        exit(0);
+        if (upgradeForce) {
+            exit(0);
+        }
     }];
     [c addAction:action];
     [c addAction:cancel];
