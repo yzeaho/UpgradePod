@@ -13,12 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  * @brief App内部版本号
  */
-@property (nonatomic, copy) NSString *currentVersion;
+@property (nonatomic, readonly, copy) NSString *currentVersion;
 
 /*!
  * @brief App Store的版本号
  */
-@property (nonatomic, copy) NSString *marketingVersion;
+@property (nonatomic, readonly, copy) NSString *marketingVersion;
 
 /*!
  * @brief 单例对象
