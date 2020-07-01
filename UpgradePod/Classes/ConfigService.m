@@ -44,12 +44,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 - (void)config:(NSString *)url enable:(BOOL)enable {
     _configUrl = url;
     _enable = enable;
-    if (enable) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(applicationDidBecomeActiveNotification)
-                                                     name:UIApplicationDidBecomeActiveNotification
-                                                   object:nil];
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActiveNotification)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
 }
 
 - (void)addCallback:(id<ConfigCallback>)callback {
@@ -65,8 +63,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 
 - (void)applicationDidBecomeActiveNotification {
     DDLogDebug(@"applicationDidBecomeActiveNotification");
+    if (!self.enable) {
+        DDLogDebug(@"Feature not available");
+        return;
+    }
     if (self.started) {
-        DDLogDebug(@"fetch is already startting");
+        DDLogDebug(@"Already started to acquire");
         return;
     }
     if (self.successDate) {
@@ -91,7 +93,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     self.started = true;
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", @"text/json", nil];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", @"text/json", @"text/javascript", nil];
     DDLogInfo(@"url %@", _configUrl);
     [manager GET:_configUrl parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
         if (!responseObject || ![responseObject isKindOfClass:[NSDictionary class]]) {
@@ -118,12 +120,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
         DDLogDebug(@"no new version");
         return;
     }
-    if (!([_model isUpgradeNormal] || [_model isUpgradeForce])) {
-        DDLogDebug(@"Do not prompt for upgrade version");
-        return;
-    }
     if (self.shown) {
         DDLogDebug(@"Alert is already presenting");
+        return;
+    }
+    if (!([_model isUpgradeNormal] || [_model isUpgradeForce])) {
+        DDLogDebug(@"Do not prompt for upgrade version");
         return;
     }
     NSString *updateAddress = _model.updateAddress;
