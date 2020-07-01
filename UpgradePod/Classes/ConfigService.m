@@ -1,7 +1,7 @@
 #import "ConfigService.h"
 #import "ConfigModel.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
-#import <AFNetworking/AFNetworking-umbrella.h>
+#import <AFNetworking/AFNetworking.h>
 #import <MJExtension/MJExtension.h>
 
 @interface ConfigService ()
