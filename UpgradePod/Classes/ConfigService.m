@@ -104,7 +104,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
         DDLogInfo(@"fetch app config from server finish");
         NSDictionary *dict = (NSDictionary *) responseObject;
         ConfigModel *cm = [ConfigModel mj_objectWithKeyValues:dict];
-        cm.appStoreCheckUrl = @"https://itunes.apple.com/cn/lookup?id=1502067191";
         if (cm.appStoreCheckUrl && cm.appStoreCheckUrl.length > 0) {
             cm.version = self.marketingVersion;
             self.model = cm;
