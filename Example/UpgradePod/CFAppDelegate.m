@@ -19,6 +19,7 @@
     [DDLog addLogger:logger]; // Uses os_log
     [[ConfigService sharedInstance] config:@"https://biz-dev.szse.cn:8289/wapp/native/ios_app_config.json" enable:YES];
     DDLogDebug(@"currentVersion:%@", [ConfigService sharedInstance].currentVersion);
+    
     return YES;
 }
 

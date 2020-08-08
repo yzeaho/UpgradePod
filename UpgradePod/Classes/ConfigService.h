@@ -11,12 +11,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ConfigService : NSObject
 
 /*!
- * @brief App内部版本号
+ * @brief App内部版本号，开发使用的版本号
  */
 @property (nonatomic, readonly, copy) NSString *currentVersion;
 
 /*!
- * @brief App Store的版本号
+ * @brief App Store的版本号，对外版本号
  */
 @property (nonatomic, readonly, copy) NSString *marketingVersion;
 

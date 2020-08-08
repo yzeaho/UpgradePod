@@ -98,13 +98,54 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     [manager GET:_configUrl parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
         if (!responseObject || ![responseObject isKindOfClass:[NSDictionary class]]) {
             DDLogWarn(@"error server Data");
+            self.started = false;
             return;
+        }
+        DDLogInfo(@"fetch app config from server finish");
+        NSDictionary *dict = (NSDictionary *) responseObject;
+        ConfigModel *cm = [ConfigModel mj_objectWithKeyValues:dict];
+        cm.appStoreCheckUrl = @"https://itunes.apple.com/cn/lookup?id=1502067191";
+        if (cm.appStoreCheckUrl && cm.appStoreCheckUrl.length > 0) {
+            cm.version = self.marketingVersion;
+            self.model = cm;
+            [self checkAppStore:cm.appStoreCheckUrl];
+        } else {
+            self.started = false;
+            self.successDate = [NSDate date];
+            self.model = cm;
+            for (id<ConfigCallback> delegate in self.callbackList) {
+                [delegate configNotifyChange];
+            }
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DDLogWarn(@"%@", error);
+        self.started = false;
+        [self performSelector:@selector(fetch) withObject:nil afterDelay:60];
+    }];
+}
+
+- (void)checkAppStore:(NSString *)url {
+    DDLogInfo(@"fetch app store config start");
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", @"text/json", @"text/javascript", nil];
+    DDLogInfo(@"url %@", url);
+    [manager GET:url parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+        if (!responseObject || ![responseObject isKindOfClass:[NSDictionary class]]) {
+            DDLogWarn(@"error server Data");
+            self.started = false;
+            return;
+        }
+        DDLogInfo(@"fetch app store config finish");
+        NSDictionary *dict = (NSDictionary *) responseObject;
+        NSArray *infoArray = [dict objectForKey:@"results"];
+        if ([infoArray count]) {
+            NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
+            NSString *lastVersion = [releaseInfo objectForKey:@"version"];
+            self.model.version = lastVersion;
         }
         self.started = false;
         self.successDate = [NSDate date];
-        DDLogInfo(@"fetch app config from server finish");
-        NSDictionary *dict = (NSDictionary *) responseObject;
-        self.model = [ConfigModel mj_objectWithKeyValues:dict];
         for (id<ConfigCallback> delegate in self.callbackList) {
             [delegate configNotifyChange];
         }

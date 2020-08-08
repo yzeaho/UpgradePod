@@ -40,6 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *appSize;
 
 /**
+ * App Store的检测升级地址
+ */
+@property (nonatomic, copy) NSString *appStoreCheckUrl;
+
+/**
  * 有新版本？
  */
 - (BOOL)hasNewVersion:(NSString *)marketingVersion;

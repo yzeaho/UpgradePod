@@ -438,6 +438,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UpgradePod/UpgradePod-Prefix.pch";
 				INFOPLIST_FILE = "UpgradePod/UpgradePod-Info.plist";
+				MARKETING_VERSION = 1.0.8;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.UpgradePod-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -459,6 +460,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UpgradePod/UpgradePod-Prefix.pch";
 				INFOPLIST_FILE = "UpgradePod/UpgradePod-Info.plist";
+				MARKETING_VERSION = 1.0.8;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.UpgradePod-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
