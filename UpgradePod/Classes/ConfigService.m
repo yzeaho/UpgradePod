@@ -41,7 +41,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     return self;
 }
 
-- (void)config:(NSString *)url enable:(BOOL)enable {
+- (void)setupWithUrl:(NSString *)url enable:(BOOL)enable {
     _configUrl = url;
     _enable = enable;
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -92,6 +92,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     DDLogInfo(@"fetch app config from server start");
     self.started = true;
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", @"text/json", @"text/javascript", nil];
     DDLogInfo(@"url %@", _configUrl);
@@ -126,6 +127,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 - (void)checkAppStore:(NSString *)url {
     DDLogInfo(@"fetch app store config start");
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", @"text/json", @"text/javascript", nil];
     DDLogInfo(@"url %@", url);

@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*!
  * @brief 配置文件下载地址和启用标识
  */
-- (void)config:(NSString *)url enable:(BOOL)enable;
+- (void)setupWithUrl:(NSString *)url enable:(BOOL)enable;
 
 /**
  * 添加监听回调
