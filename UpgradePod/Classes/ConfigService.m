@@ -205,4 +205,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     return _model && [_model hasNewVersion:_marketingVersion];
 }
 
+- (ConfigModel *)newModel {
+    if (_model) {
+       return [_model copy];
+    }
+    return nil;
+}
+
 @end

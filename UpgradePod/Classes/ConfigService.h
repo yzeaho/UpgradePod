@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "ConfigModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,8 +43,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 /*!
  * @brief 显示版本更新对话框
-*/
+ */
 - (void)show:(UIViewController *)controller;
+
+/*!
+ * @brief 是否有版本更新
+ */
+- (BOOL)hasNewVersion;
+
+/*!
+ * @brief 版本信息
+ */
+- (ConfigModel *)newModel;
 
 @end
 
