@@ -7,7 +7,6 @@
 @interface ConfigService ()
 
 @property (nonatomic, strong) NSMutableArray *callbackList;
-@property (nonatomic, strong) ConfigModel *model;
 @property (nonatomic, assign) BOOL shown;
 @property (nonatomic, assign) BOOL started;
 @property (nonatomic, assign) BOOL enable;
@@ -203,13 +202,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 
 - (BOOL)hasNewVersion {
     return _model && [_model hasNewVersion:_marketingVersion];
-}
-
-- (ConfigModel *)newModel {
-    if (_model) {
-       return [_model copy];
-    }
-    return nil;
 }
 
 @end
