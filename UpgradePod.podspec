@@ -8,7 +8,11 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UpgradePod'
+<<<<<<< HEAD
   s.version          = '1.0.4'
+=======
+  s.version          = '1.0.3'
+>>>>>>> 76e99ce33f74d22d6674841aeda44c9667063db8
   s.summary          = 'A short description of UpgradePod.'
 
 # This description is used to generate tags and improve search results.
