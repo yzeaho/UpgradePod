@@ -22,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, copy) NSString *marketingVersion;
 
 /*!
+ * @brief 版本信息
+ */
+@property (nonatomic, strong) ConfigModel *model;
+
+/*!
  * @brief 单例对象
 */
 + (instancetype)sharedInstance;
@@ -50,11 +55,6 @@ NS_ASSUME_NONNULL_BEGIN
  * @brief 是否有版本更新
  */
 - (BOOL)hasNewVersion;
-
-/*!
- * @brief 版本信息
- */
-- (ConfigModel *)newModel;
 
 @end
 

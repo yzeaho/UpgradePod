@@ -14,13 +14,9 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - CocoaLumberjack (3.6.1):
-    - CocoaLumberjack/Core (= 3.6.1)
-  - CocoaLumberjack/Core (3.6.1)
   - MJExtension (3.2.2)
-  - UpgradePod (0.0.3):
+  - UpgradePod (1.0.4):
     - AFNetworking (~> 4.0)
-    - CocoaLumberjack
     - MJExtension
 
 DEPENDENCIES:
@@ -29,7 +25,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
-    - CocoaLumberjack
     - MJExtension
 
 EXTERNAL SOURCES:
@@ -38,10 +33,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
-  UpgradePod: ff9bcb29dd3ab81f4d454079ac5fbde8db269e35
+  UpgradePod: 642204c869afdb44de12bc41e1a0ce8e020885f4
 
 PODFILE CHECKSUM: 20c83e82f0b6cf0b32de8daeef0f53aeb63d5471
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0.beta.1

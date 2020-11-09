@@ -1,6 +1,6 @@
 {
   "name": "UpgradePod",
-  "version": "0.0.3",
+  "version": "1.0.4",
   "summary": "A short description of UpgradePod.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/yzeaho/UpgradePod",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/yzeaho/UpgradePod.git",
-    "tag": "0.0.3"
+    "tag": "1.0.4"
   },
   "platforms": {
     "ios": "11.0"
@@ -27,9 +27,6 @@
   "dependencies": {
     "AFNetworking": [
       "~> 4.0"
-    ],
-    "CocoaLumberjack": [
-
     ],
     "MJExtension": [
 

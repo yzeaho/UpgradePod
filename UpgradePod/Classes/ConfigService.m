@@ -1,13 +1,11 @@
 #import "ConfigService.h"
 #import "ConfigModel.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
 #import <AFNetworking/AFNetworking.h>
 #import <MJExtension/MJExtension.h>
 
 @interface ConfigService ()
 
 @property (nonatomic, strong) NSMutableArray *callbackList;
-@property (nonatomic, strong) ConfigModel *model;
 @property (nonatomic, assign) BOOL shown;
 @property (nonatomic, assign) BOOL started;
 @property (nonatomic, assign) BOOL enable;
@@ -15,8 +13,6 @@
 @property (nonatomic, strong) NSString *configUrl;
 
 @end
-
-static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 
 @implementation ConfigService
 
@@ -51,29 +47,29 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 }
 
 - (void)addCallback:(id<ConfigCallback>)callback {
-    DDLogDebug(@"%@", callback);
+    NSLog(@"%@", callback);
     [self.callbackList addObject:callback];
     [callback configNotifyChange];
 }
 
 - (void)removeCallback:(id<ConfigCallback>)callback {
-    DDLogDebug(@"%@", callback);
+    NSLog(@"%@", callback);
     [self.callbackList removeObject:callback];
 }
 
 - (void)applicationDidBecomeActiveNotification {
-    DDLogDebug(@"applicationDidBecomeActiveNotification");
+    NSLog(@"applicationDidBecomeActiveNotification");
     if (!self.enable) {
-        DDLogDebug(@"Feature not available");
+        NSLog(@"Feature not available");
         return;
     }
     if (self.started) {
-        DDLogDebug(@"Already started to acquire");
+        NSLog(@"Already started to acquire");
         return;
     }
     if (self.successDate) {
         NSTimeInterval interval = ABS([self.successDate timeIntervalSinceNow]);
-        DDLogDebug(@"timeIntervalSinceNow %f", interval);
+        NSLog(@"timeIntervalSinceNow %f", interval);
         if (interval < 1800) {
             for (id<ConfigCallback> delegate in self.callbackList) {
                 [delegate configNotifyChange];
@@ -86,23 +82,23 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 
 - (void)fetch {
     if (!_configUrl) {
-        DDLogWarn(@"configUrl is nil");
+        NSLog(@"configUrl is nil");
         return;
     }
-    DDLogInfo(@"fetch app config from server start");
+    NSLog(@"fetch app config from server start");
     self.started = true;
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", @"text/json", @"text/javascript", nil];
-    DDLogInfo(@"url %@", _configUrl);
+    NSLog(@"url %@", _configUrl);
     [manager GET:_configUrl parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
         if (!responseObject || ![responseObject isKindOfClass:[NSDictionary class]]) {
-            DDLogWarn(@"error server Data");
+            NSLog(@"error server Data");
             self.started = false;
             return;
         }
-        DDLogInfo(@"fetch app config from server finish");
+        NSLog(@"fetch app config from server finish");
         NSDictionary *dict = (NSDictionary *) responseObject;
         ConfigModel *cm = [ConfigModel mj_objectWithKeyValues:dict];
         if (cm.appStoreCheckUrl && cm.appStoreCheckUrl.length > 0) {
@@ -118,26 +114,26 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        DDLogWarn(@"%@", error);
+        NSLog(@"%@", error);
         self.started = false;
         [self performSelector:@selector(fetch) withObject:nil afterDelay:60];
     }];
 }
 
 - (void)checkAppStore:(NSString *)url {
-    DDLogInfo(@"fetch app store config start");
+    NSLog(@"fetch app store config start");
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager.requestSerializer setCachePolicy:NSURLRequestReloadIgnoringCacheData];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"application/json", @"text/json", @"text/javascript", nil];
-    DDLogInfo(@"url %@", url);
+    NSLog(@"url %@", url);
     [manager GET:url parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
         if (!responseObject || ![responseObject isKindOfClass:[NSDictionary class]]) {
-            DDLogWarn(@"error server Data");
+            NSLog(@"error server Data");
             self.started = false;
             return;
         }
-        DDLogInfo(@"fetch app store config finish");
+        NSLog(@"fetch app store config finish");
         NSDictionary *dict = (NSDictionary *) responseObject;
         NSArray *infoArray = [dict objectForKey:@"results"];
         if ([infoArray count]) {
@@ -151,7 +147,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
             [delegate configNotifyChange];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        DDLogWarn(@"%@", error);
+        NSLog(@"%@", error);
         self.started = false;
         [self performSelector:@selector(fetch) withObject:nil afterDelay:60];
     }];
@@ -159,21 +155,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 
 - (void)show:(UIViewController *)controller {
     if (![self hasNewVersion]) {
-        DDLogDebug(@"no new version");
+        NSLog(@"no new version");
         return;
     }
     if (self.shown) {
-        DDLogDebug(@"Alert is already presenting");
+        NSLog(@"Alert is already presenting");
         return;
     }
     if (!([_model isUpgradeNormal] || [_model isUpgradeForce])) {
-        DDLogDebug(@"Do not prompt for upgrade version");
+        NSLog(@"Do not prompt for upgrade version");
         return;
     }
     NSString *updateAddress = _model.updateAddress;
-    DDLogDebug(@"updateAddress:%@", updateAddress);
+    NSLog(@"updateAddress:%@", updateAddress);
     NSBundle *mainBundle = [NSBundle mainBundle];
-    DDLogDebug(@"%@", mainBundle.bundlePath);
+    NSLog(@"%@", mainBundle.bundlePath);
     NSString *path = [mainBundle pathForResource:@"Frameworks/UpgradePod.framework/UpgradePod" ofType:@"bundle"];
     NSBundle *bundle = [NSBundle bundleWithPath:path];
     NSString *upgradeTitle = NSLocalizedStringFromTableInBundle(@"upgrade.title", @"UpgradePod", bundle, nil);
@@ -183,7 +179,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
     UIAlertController *c = [UIAlertController alertControllerWithTitle:upgradeTitle message:_model.updateTip preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *action = [UIAlertAction actionWithTitle:actionUpgrade style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:updateAddress] options:@{} completionHandler:^(BOOL success) {
-            DDLogDebug(@"openURL completion %@", success ? @"success" : @"error");
+            NSLog(@"openURL completion %@", success ? @"success" : @"error");
             if (upgradeForce) {
                 exit(0);
             }
@@ -203,13 +199,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelDebug;
 
 - (BOOL)hasNewVersion {
     return _model && [_model hasNewVersion:_marketingVersion];
-}
-
-- (ConfigModel *)newModel {
-    if (_model) {
-       return [_model copy];
-    }
-    return nil;
 }
 
 @end
