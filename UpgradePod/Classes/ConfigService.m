@@ -168,10 +168,7 @@
     }
     NSString *updateAddress = _model.updateAddress;
     NSLog(@"updateAddress:%@", updateAddress);
-    NSBundle *mainBundle = [NSBundle mainBundle];
-    NSLog(@"%@", mainBundle.bundlePath);
-    NSString *path = [mainBundle pathForResource:@"Frameworks/UpgradePod.framework/UpgradePod" ofType:@"bundle"];
-    NSBundle *bundle = [NSBundle bundleWithPath:path];
+    NSBundle *bundle = [self bundleWithPod];
     NSString *upgradeTitle = NSLocalizedStringFromTableInBundle(@"upgrade.title", @"UpgradePod", bundle, nil);
     NSString *actionCancel = NSLocalizedStringFromTableInBundle(@"action.cancel", @"UpgradePod", bundle, nil);
     NSString *actionUpgrade = NSLocalizedStringFromTableInBundle(@"action.upgrade", @"UpgradePod", bundle, nil);
@@ -199,6 +196,17 @@
 
 - (BOOL)hasNewVersion {
     return _model && [_model hasNewVersion:_marketingVersion];
+}
+
+- (NSBundle *)bundleWithPod {
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    NSString *path = [mainBundle pathForResource:@"Frameworks/UpgradePod.framework/UpgradePod" ofType:@"bundle"];
+    NSBundle *bundle = [NSBundle bundleWithPath:path];
+    if (!bundle) {
+        path = [mainBundle pathForResource:@"UpgradePod" ofType:@"bundle"];
+        bundle = [NSBundle bundleWithPath:path];
+    }
+    return bundle;
 }
 
 @end

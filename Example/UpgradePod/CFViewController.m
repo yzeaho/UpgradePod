@@ -1,11 +1,3 @@
-//
-//  CFViewController.m
-//  UpgradePod
-//
-//  Created by yzeaho on 06/29/2020.
-//  Copyright (c) 2020 yzeaho. All rights reserved.
-//
-
 #import "CFViewController.h"
 #import "ConfigService.h"
 
